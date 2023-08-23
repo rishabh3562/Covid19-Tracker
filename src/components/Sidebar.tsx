@@ -72,7 +72,7 @@ const SidebarItem: React.FC<SidebarItemProps> = ({ name, icon,links }) => {
 };
 
 const Sidebar: React.FC = () => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
