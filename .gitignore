@@ -4,7 +4,12 @@
 /node_modules
 /.pnp
 .pnp.js
-
+backend/node_modules
+frontend/node_modules
+backend/.pnp
+backend/package-lock.json
+frontend/package-lock.json
+backend/.env
 # testing
 /coverage
 

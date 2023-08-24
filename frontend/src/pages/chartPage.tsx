@@ -42,7 +42,7 @@ interface CardGridProps {
 
 
 const CardGrid: React.FC<CardGridProps> = ({ data }) => {
-  console.log(data)
+  // console.log(data)
 
   return (<>
 

@@ -30,7 +30,7 @@ const BarChart: React.FunctionComponent<Props> = ({ countries }) => {
   const generateChartData = (): ChartData => {
     const data: number[] = [];
     const labels: string[] = [];
-
+// console.log("countries in barChart:",countries)
     countries.forEach((country) => {
       data.push(country.NewConfirmed);
       labels.push(country.Country);
