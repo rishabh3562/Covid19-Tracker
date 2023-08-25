@@ -8,6 +8,7 @@ const path = require("path");
 const { yellow } = require("colors");
 const connectDB = require("./config/db");
 const cors = require('cors'); // Added this line for CORS
+const asyncHandler = require('express-async-handler');
 dotenv.config();
 const uri = process.env.MONGO_URI;
 
@@ -33,15 +34,25 @@ if (process.env.NODE_ENV === "production") {
     res.sendFile(path.resolve(__dirname1, "frontend", "build", "index.html"))
   );
 } else {
-  app.get('/', async (req, res) => {
+  app.get('/', asyncHandler(async (req, res) => {
     try {
-      const data = await User.find({});
-      console.log("/ route data  ")
-      res.status(200).json({ data });
+      const users = await User.find({});
+  
+      // Map the users and add the image URL to each user object
+      const usersWithImages = users.map((user) => {
+        return {
+          _id: user._id,
+          name: user.name,
+          email: user.email,
+          pic: user.pic, // Add the image URL here
+        };
+      });
+  
+      res.status(200).json({ data: usersWithImages });
     } catch (error) {
       res.status(500).json({ error: "Internal Server Error" });
     }
-  });
+  }));
 }
 
 // Error Handling middlewares

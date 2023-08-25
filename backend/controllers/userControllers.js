@@ -1,9 +1,22 @@
-const asyncHandler = require("express-async-handler");
-const User = require("../models/userModel");
-const generateToken = require("../config/generateToken");
-const {protect}=require("../middleware/authMiddleware")
+const express = require('express');
+const asyncHandler = require('express-async-handler');
+const User = require('../models/userModel');
+const generateToken = require('../config/generateToken');
+const { protect } = require('../middleware/authMiddleware');
+const multer = require('multer');
+const path = require('path');
 
-const jwt = require("jsonwebtoken");
+const router = express.Router();
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/');
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+  },
+});
+
+const upload = multer({ storage: storage });
 //@description     Get or Search all users
 //@route           GET /api/user?search=
 //@access          Public
@@ -26,36 +39,36 @@ const allUsers = asyncHandler(async (req, res) => {
 //@access          Public
 
 //without pic
-const registerUser = asyncHandler(
-  asyncHandler(async (req, res) => {
-      const { name, email, password } = req.body;
+// const registerUser = asyncHandler(
+//   asyncHandler(async (req, res) => {
+//       const { name, email, password } = req.body;
     
-      // Validate user input (you can add more validation here)
+//       // Validate user input (you can add more validation here)
     
-      // Check if user already exists
-      const existingUser = await User.findOne({ email });
+//       // Check if user already exists
+//       const existingUser = await User.findOne({ email });
     
-      if (existingUser) {
-        res.status(400).json({ message: 'User already exists' });
-        return;
-      }
+//       if (existingUser) {
+//         res.status(400).json({ message: 'User already exists' });
+//         return;
+//       }
     
-      // Create the user
-      const newUser = await User.create({ name, email, password });
-      console.log("newUser in signup route :", newUser)
-      // Generate a JWT token for the newly registered user
-      const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
-        expiresIn: '30d', // Token expires in 1 day
-      });
-      console.log("token in signup route :", token)
-      res.status(201).json({
-        _id: newUser._id,
-        name: newUser.name,
-        email: newUser.email,
-        token: token,
-      });
-    })
-);
+//       // Create the user
+//       const newUser = await User.create({ name, email, password });
+//       console.log("newUser in signup route :", newUser)
+//       // Generate a JWT token for the newly registered user
+//       const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
+//         expiresIn: '30d', // Token expires in 1 day
+//       });
+//       console.log("token in signup route :", token)
+//       res.status(201).json({
+//         _id: newUser._id,
+//         name: newUser.name,
+//         email: newUser.email,
+//         token: token,
+//       });
+//     })
+// );
 
 // const registerUser = asyncHandler(async (req, res) => {
 //   const { name, email, password, pic } = req.body;
@@ -117,4 +130,4 @@ const authUser = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { allUsers, registerUser, authUser };
+module.exports = { allUsers,  authUser };
