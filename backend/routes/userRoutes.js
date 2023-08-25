@@ -64,7 +64,7 @@ router.post("/login", authUser);
 // Route for entering user data
 router.post("/signup", asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
-
+console.log("req.body in signup route :", req.body)
   // Validate user input (you can add more validation here)
 
   // Check if user already exists
@@ -77,7 +77,7 @@ router.post("/signup", asyncHandler(async (req, res) => {
 
   // Create the user
   const newUser = await User.create({ name, email, password });
-  
+  console.log("newUser in signup route :", newUser)
   // Generate a JWT token for the newly registered user
   const token = generateToken(newUser._id);
   

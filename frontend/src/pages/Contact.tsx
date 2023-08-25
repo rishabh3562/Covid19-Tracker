@@ -1,37 +1,39 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
 import axios from 'axios';
-import UserCard from '../components/UserCard'; // Import the UserCard component
+import UserCard from '../components/UserCard';
+
 interface User {
   _id: string;
   name: string;
   email: string;
+  password: string;
   pic: string;
 }
 
-interface UserCardProps {
-  user: User;
-}
 const ContactsPage: React.FC = () => {
   const queryClient = useQueryClient();
   const [users, setUsers] = useState<User[]>([]);
+  const [loading, setLoading] = useState(false);
 
   useQuery(
     'users',
-    () =>
-      axios.get('/').then((res) => {
-        console.log('res', res.data);
-        setUsers(res.data.data); // Assuming the user data is stored in res.data.data
-      }),
-    {
-      onError: (error) => {
+    async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get('/'); // Replace with your API endpoint
+        console.log(response.data.data.length!==0?"true":"false");
+        setUsers(response.data.data);
+      } catch (error) {
         console.error('Error fetching users:', error);
-      },
+      } finally {
+        setLoading(false);
+      }
     }
   );
 
   const addUserMutation = useMutation(
-    (user: User) => axios.post('/api/user/signup', user),
+    (user: User) => axios.post('/api/user/signup', user), // Replace with your signup API endpoint
     {
       onError: (error) => {
         console.error('Error adding user:', error);
@@ -49,27 +51,36 @@ const ContactsPage: React.FC = () => {
 
   const handleAddUser = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
 
     const newUser: User = {
       _id: '',
       name,
       email,
-      pic: '', // Leave pic empty for now, it will be set after uploading the image
+      password,
+      pic: '',
     };
 
-    const userResponse = await addUserMutation.mutateAsync(newUser);
-    if (userResponse.data._id && image) {
-      const imageFormData = new FormData();
-      imageFormData.append('image', image);
+    try {
+      const userResponse = await addUserMutation.mutateAsync(newUser);
+console.log(userResponse);
+      if (userResponse.data._id && image) {
+        const imageFormData = new FormData();
+        imageFormData.append('image', image);
 
-      await axios.post(`/api/user/upload?userId=${userResponse.data._id}`, imageFormData);
+        await axios.post(`/api/user/upload?userId=${userResponse.data._id}`, imageFormData); // Replace with your image upload API endpoint
+      }
+
+      queryClient.invalidateQueries('users');
+      setName('');
+      setEmail('');
+      setPassword('');
+      setImage(null);
+    } catch (error) {
+      console.error('Error adding user:', error);
+    } finally {
+      setLoading(false);
     }
-
-    queryClient.invalidateQueries('users');
-    setName('');
-    setEmail('');
-    setPassword('');
-    setImage(null);
   };
 
   return (
@@ -77,49 +88,56 @@ const ContactsPage: React.FC = () => {
       <h2 className="text-2xl font-semibold mb-4">Contacts</h2>
       <div className="mb-4">
         <h3 className="text-lg font-semibold mb-2">Add New User</h3>
-        
         <form onSubmit={handleAddUser} className="flex space-x-4">
-  <input
-    type="text"
-    placeholder="Name"
-    value={name}
-    onChange={(e) => setName(e.target.value)}
-    className="border p-2 w-1/4"
-  />
-  <input
-    type="email"
-    placeholder="Email"
-    value={email}
-    onChange={(e) => setEmail(e.target.value)}
-    className="border p-2 w-1/4"
-  />
-  <input
-    type="password"
-    placeholder="Password"
-    value={password}
-    onChange={(e) => setPassword(e.target.value)}
-    className="border p-2 w-1/4"
-  />
-  <input
-    type="file"
-    accept="image/*"
-    onChange={(e) => setImage(e.target.files?.[0] || null)}
-    className="border p-2"
-  />
-  <button type="submit" className="bg-blue-500 text-white p-2 rounded">
-    Add User
-  </button>
-</form>
-
-
+          <input
+            type="text"
+            placeholder="Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="border p-2 w-1/4"
+          />
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="border p-2 w-1/4"
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="border p-2 w-1/4"
+          />
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(e) => setImage(e.target.files?.[0] || null)}
+            className="border p-2"
+          />
+          <button type="submit" className="bg-blue-500 text-white p-2 rounded">
+            {loading ? 'Adding...' : 'Add User'}
+          </button>
+        </form>
       </div>
+
       <div>
         <h3 className="text-lg font-semibold mb-2">User List</h3>
+        {users.length!==0?
+        (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {users.map((user: User) => (
             <UserCard key={user._id} user={user} />
           ))}
         </div>
+        )
+        :(
+        <>
+        <p>create users</p>
+        </>
+        )
+        }
       </div>
     </div>
   );

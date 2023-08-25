@@ -44,7 +44,7 @@ const UserCard: React.FC<UserCardProps> = ({ user }) => {
         defaultImg: defaultImg
     };
 
-    console.log(myObject);
+    // console.log(myObject);
 
     return (
         <div className="border p-4 rounded shadow">
