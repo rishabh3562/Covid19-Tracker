@@ -31,27 +31,23 @@ const UserCard: React.FC<UserCardProps> = ({ user }) => {
 
     const PF = "http://localhost:8000/";
     const defaultImg =
-        "https://c4.wallpaperflare.com/wallpaper/72/624/1004/anime-one-piece-zoro-roronoa-wallpaper-preview.jpg";
+        "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg";
 
-    const imageUrl = user.pic ? `${PF}${user.pic.replace(/\\/g, '/')}` : defaultImg;
-
-    const myObject = {
-        user: user.email,
-        imageUrl: imageUrl,
-        'user.pic': user.pic,
-        PF: PF,
-        'userPicReplaced': user.pic.replace(/\\/g, '/'),
-        defaultImg: defaultImg
-    };
-
-    // console.log(myObject);
+    // const imageUrl = user.pic ? `${PF}${user.pic.replace(/\\/g, '/')}` : defaultImg;
+    const imageUrl = user.pic ? user.pic : defaultImg;
 
     return (
-        <div className="border p-4 rounded shadow">
-            <img src={user.pic} alt={user.name} className="w-full h-auto mb-2" />
+        <div className="border p-4 rounded shadow flex">
+        <div className="w-1/4">
+            <div className="w-16 h-16 rounded-full overflow-hidden">
+                <img src={imageUrl} alt={user.name} className="object-cover w-full h-full" />
+            </div>
+        </div>
+        <div className="w-3/4 pl-4">
             <h3 className="text-xl font-semibold">{user.name}</h3>
             <p className="text-gray-500">{user.email}</p>
         </div>
+    </div>
     );
 };
 
