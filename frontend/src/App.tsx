@@ -1,30 +1,117 @@
 import React from 'react';
-import MapComponent from './components/MapComponent';
-import { useCountriesData } from './utils/apis'; // Import the custom hook
-import { CountryData } from './types'; // Import the type
+import CovidGraph from './components/CovidGraph';
 
 const App: React.FC = () => {
-  const { data: countriesData, isLoading, isError } = useCountriesData();
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (isError) {
-    return <div>Error fetching data</div>;
-  }
-
   return (
-    <div>
-      <h1>COVID-19 Map</h1>
-      {countriesData && (
-        <MapComponent countriesData={countriesData as CountryData[]} />
-      )}
+    <div className="App">
+      <CovidGraph />
     </div>
   );
 };
 
 export default App;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// import React from 'react';
+// import MapComponent from './components/MapComponent';
+// import { useCountriesData } from './utils/apis'; // Import the custom hook
+// import { CountryData } from './types'; // Import the type
+
+// const App: React.FC = () => {
+//   const { data: countriesData, isLoading, isError } = useCountriesData();
+
+//   if (isLoading) {
+//     return <div>Loading...</div>;
+//   }
+
+//   if (isError) {
+//     return <div>Error fetching data</div>;
+//   }
+
+//   return (
+//     <div>
+//       <h1>COVID-19 Map</h1>
+//       {countriesData && (
+//         <MapComponent countriesData={countriesData as CountryData[]} />
+//       )}
+//     </div>
+//   );
+// };
+
+// export default App;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 // import axios from 'axios'
