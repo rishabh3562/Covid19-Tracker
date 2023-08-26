@@ -38,3 +38,7 @@ export const updateUserDetails = async (updatedUser: User): Promise<User> => {
   }
 };
 
+export const deleteUser = async (userId: string) => {
+  const response = await axios.delete(`/api/user/${userId}`);
+  return response.data;
+}

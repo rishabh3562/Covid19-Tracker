@@ -2,7 +2,8 @@ const express = require("express");
 const {
   authUser,
   allUsers,
-  updateUser
+  updateUser,
+  deleteUser
 } = require("../controllers/userControllers");
 const asyncHandler = require('express-async-handler');
 const User = require("../models/userModel");
@@ -59,7 +60,7 @@ router.post('/upload', upload.single('image'), asyncHandler(async (req, res) => 
 }));
 // router.route('/:id').put(updateUser );
 router.route('/:id').put(updateUser);
-
+router.route('/:id').delete(deleteUser);
 router.route("/").get(allUsers);
 // router.route("/signup").post(registerUser);
 router.post("/login", authUser);

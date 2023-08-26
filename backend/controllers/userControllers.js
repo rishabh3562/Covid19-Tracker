@@ -34,7 +34,25 @@ const allUsers = asyncHandler(async (req, res) => {
   res.send(users);
 });
 
-//@description     Register new user
+const deleteUser = asyncHandler(async (req, res) => {
+  const userId = req.params.id;
+  console.log("\n\nuserId in deleteUser route :", userId)
+  // Perform any additional checks you need, like ensuring the user is an admin
+
+  try {
+    const user = await User.findById(userId);
+console.log("\n\nuser in deleteUser route :", user)
+    if (user) {
+      const data =  await User.findByIdAndDelete(req.params.id);
+      console.log("\n\data in deleteUser route :",data)
+      res.json({ message: 'User removed' });
+    } else {
+      res.status(404).json({ error: 'User not found' });
+    }
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
 //@route           POST /api/user/
 //@access          Public
 
@@ -157,4 +175,4 @@ const authUser = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { allUsers, authUser, updateUser };
+module.exports = { allUsers, authUser, updateUser, deleteUser };

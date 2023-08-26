@@ -37,7 +37,7 @@ if (process.env.NODE_ENV === "production") {
   app.get('/', asyncHandler(async (req, res) => {
     try {
       const users = await User.find({});
-  
+
       // Map the users and add the image URL to each user object
       const usersWithImages = users.map((user) => {
         return {
@@ -47,12 +47,13 @@ if (process.env.NODE_ENV === "production") {
           pic: user.pic, // Add the image URL here
         };
       });
-  
+
       res.status(200).json({ data: usersWithImages });
     } catch (error) {
       res.status(500).json({ error: "Internal Server Error" });
     }
   }));
+
 }
 
 // Error Handling middlewares

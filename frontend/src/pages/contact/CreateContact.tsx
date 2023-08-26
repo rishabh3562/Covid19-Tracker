@@ -83,38 +83,53 @@ const ContactsPage: React.FC = () => {
       <h2 className="text-2xl font-semibold mb-4">Contacts</h2>
       <div className="mb-4">
         <h3 className="text-lg font-semibold mb-2">Add New User</h3>
-        <form onSubmit={handleAddUser} className="flex space-x-4">
-          <input
-            type="text"
-            placeholder="Name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className="border p-2 w-1/4"
-          />
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="border p-2 w-1/4"
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="border p-2 w-1/4"
-          />
-          <input
-            type="file"
-            accept="image/*"
-            onChange={(e) => setImage(e.target.files?.[0] || null)}
-            className="border p-2"
-          />
-          <button type="submit" className="bg-blue-500 text-white p-2 rounded">
-            {loading ? 'Adding...' : 'Add User'}
-          </button>
-        </form>
+        <form onSubmit={handleAddUser} className="flex flex-col md:flex-row space-x-4">
+  <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 w-full">
+    <input
+      type="text"
+      placeholder="Name"
+      value={name}
+      onChange={(e) => setName(e.target.value)}
+      className="border p-2 w-full"
+    />
+    <input
+      type="email"
+      placeholder="Email"
+      value={email}
+      onChange={(e) => setEmail(e.target.value)}
+      className="border p-2 w-full"
+    />
+    <input
+      type="password"
+      placeholder="Password"
+      value={password}
+      onChange={(e) => setPassword(e.target.value)}
+      className="border p-2 w-full"
+    />
+  </div>
+  <div className="relative inline-flex rounded-md shadow-sm my-2">
+    <input
+      type="file"
+      accept="image/*"
+      onChange={(e) => setImage(e.target.files?.[0] || null)}
+      className="sr-only"
+    />
+    <label
+      htmlFor="upload-image-input"
+      className="cursor-pointer bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md justify-center"
+    >
+      Upload Image
+    </label>
+  </div>
+  <button
+    type="submit"
+    className="bg-blue-500 text-white p-2 rounded w-full md:w-auto"
+  >
+    {loading ? 'Adding...' : 'Add User'}
+  </button>
+</form>
+
+
       </div>
 
       <div>

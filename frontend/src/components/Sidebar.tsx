@@ -40,12 +40,7 @@ const Navbar:React.FC<NavbarProps> = ({isSidebarOpen,setIsSidebarOpen}) => {
    </button>
     <div className="text-white font-bold text-xl">My Website</div>
     </div>
-    <ul className="flex space-x-4">
-      <li><a href="#" className="text-white hover:text-gray-300">Home</a></li>
-      <li><a href="#" className="text-white hover:text-gray-300">About</a></li>
-      <li><a href="#" className="text-white hover:text-gray-300">Services</a></li>
-      <li><a href="#" className="text-white hover:text-gray-300">Contact</a></li>
-    </ul>
+    
   </div>
 </nav>
 
@@ -63,11 +58,13 @@ const SidebarHeading: React.FC<HeadingProps> = ({ title }) => {
 
 const SidebarItem: React.FC<SidebarItemProps> = ({ name, icon,links }) => {
   return (
-    <li className="my-px">
+    <li className="my-3 pl-3 ">
         <Link to={links}>
-     
-        <span className="flex items-center justify-center text-lg text-gray-500">{icon}</span>
-        <span className="ml-3">{name}</span>
+     <div className='flex items-center pl-3'>
+
+        <span className="  text-lg text-yellow-50">{icon}</span>
+        <span className="ml-3 text-yellow-50">{name}</span>
+     </div>
     
       </Link>
     </li>

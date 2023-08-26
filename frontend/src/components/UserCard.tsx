@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
-import { getUserDetails, updateUserDetails } from '../utils/apis'; // Make sure to import your API functions
+import { getUserDetails, updateUserDetails, deleteUser } from '../utils/apis'; // Make sure to import your API functions
 import { UserCardProps, User } from '../types';
 
 const UserCard: React.FC<UserCardProps> = ({ user }) => {
@@ -21,9 +21,23 @@ const UserCard: React.FC<UserCardProps> = ({ user }) => {
       onSuccess: async (updatedData: User, variables) => {
         try {
           await queryClient.invalidateQueries(['user', variables._id]);
-          setThisUser(updatedData); // Use updatedData instead of updatedUser
+          setThisUser(updatedData);
           setLoading(false);
           setIsEditing(false);
+        } catch (error) {
+          console.error('Error invalidating query:', error);
+        }
+      },
+    }
+  );
+
+  const deleteUserMutation = useMutation(
+    () => deleteUser(user._id),
+    {
+      onSuccess: async () => {
+        try {
+          await queryClient.invalidateQueries(['user', user._id]);
+          await queryClient.invalidateQueries('users'); // Invalidate the users query
         } catch (error) {
           console.error('Error invalidating query:', error);
         }
@@ -38,16 +52,16 @@ const UserCard: React.FC<UserCardProps> = ({ user }) => {
 
   const handleSubmit = async () => {
     setLoading(true);
-  
+
     const updatedUser = {
       ...thisUser,
       name: editedName,
       email: editedEmail,
     };
-  
+
     try {
       const updatedUserData = await updateUserMutation.mutateAsync(updatedUser);
-      setThisUser(updatedUserData); // Update local state with the data returned from the mutation
+      setThisUser(updatedUserData);
       queryClient.invalidateQueries(['user', user._id]);
       setLoading(false);
       setIsEditing(false);
@@ -56,7 +70,15 @@ const UserCard: React.FC<UserCardProps> = ({ user }) => {
       setLoading(false);
     }
   };
-  
+
+  const handleDelete = async () => {
+    try {
+      await deleteUserMutation.mutateAsync();
+      // Handle any necessary clean-up or navigation after deletion
+    } catch (error) {
+      console.error('Error deleting user:', error);
+    }
+  };
 
   const defaultImg =
     'https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg';
@@ -80,7 +102,7 @@ const UserCard: React.FC<UserCardProps> = ({ user }) => {
           src={imageUrl}
           alt={thisUser.name}
         />
-          {isEditing ? (
+        {isEditing ? (
           <>
             <input
               className="mb-2 px-3 py-2 border rounded-lg w-full"
@@ -105,23 +127,25 @@ const UserCard: React.FC<UserCardProps> = ({ user }) => {
             </span>
           </>
         )}
-         <div className="flex justify-center gap-3 flex-row sm:flex-col md:flex-row md:mt-3">
-        <button
-          onClick={isEditing ? handleSubmit : handleEdit}
-          className={`px-4 py-2 bg-blue-500 text-white rounded-lg ${
-            loading ? 'opacity-50 cursor-not-allowed' : ''
-          }`}
-          disabled={loading}
-        >
-          {isEditing ? (loading ? 'Loading...' : 'Submit') : 'Edit'}
-        </button>
-        <button className={`px-4 py-2 bg-blue-500 text-white rounded-lg ${
-            loading ? 'opacity-50 cursor-not-allowed' : ''
-          }`}>
-          delete
-        </button>
-      </div>
-        {/* Rest of your JSX */}
+      <div className="flex justify-center gap-3 flex-row sm:flex-col md:flex-row md:mt-3">
+          <button
+            onClick={isEditing ? handleSubmit : handleEdit}
+            className={`px-4 py-2 bg-blue-500 text-white rounded-lg ${
+              loading ? 'opacity-50 cursor-not-allowed' : ''
+            }`}
+            disabled={loading}
+          >
+            {isEditing ? (loading ? 'Loading...' : 'Submit') : 'Edit'}
+          </button>
+          <button
+            onClick={handleDelete}
+            className={`px-4 py-2 bg-blue-500 text-white rounded-lg ${
+              loading ? 'opacity-50 cursor-not-allowed' : ''
+            }`}
+          >
+            Delete
+          </button>
+        </div>
       </div>
     </div>
   );
