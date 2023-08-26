@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
 import axios from 'axios';
-import UserCard from '../components/UserCard';
+import UserCard from '../../components/UserCard';
 
 interface User {
   _id: string;
@@ -22,7 +22,7 @@ const ContactsPage: React.FC = () => {
       try {
         setLoading(true);
         const response = await axios.get('/'); // Replace with your API endpoint
-        console.log(response.data.data.length!==0?"true":"false");
+        console.log(response.data.data.length !== 0 ? "true" : "false");
         setUsers(response.data.data);
       } catch (error) {
         console.error('Error fetching users:', error);
@@ -63,7 +63,7 @@ const ContactsPage: React.FC = () => {
 
     try {
       const userResponse = await addUserMutation.mutateAsync(newUser);
-console.log(userResponse);
+      console.log(userResponse);
       if (userResponse.data._id && image) {
         const imageFormData = new FormData();
         imageFormData.append('image', image);
@@ -124,19 +124,19 @@ console.log(userResponse);
 
       <div>
         <h3 className="text-lg font-semibold mb-2">User List</h3>
-        {users.length!==0?
-        (
-        <div className="grid grid-cols-1 sm:grid-col-1 md:grid-cols-3 lg:grid-cols-3 gap-4">
-          {users.map((user: User) => (
-            <UserCard key={user._id} user={user} />
-          ))}
-        </div>
-        )
-        :(
-        <>
-        <p>create users</p>
-        </>
-        )
+        {users.length !== 0 ?
+          (
+            <div className="grid grid-cols-1 sm:grid-col-1 md:grid-cols-3 lg:grid-cols-3 gap-4">
+              {users.map((user: User) => (
+                <UserCard key={user._id} user={user} />
+              ))}
+            </div>
+          )
+          : (
+            <>
+              <p>create users</p>
+            </>
+          )
         }
       </div>
     </div>

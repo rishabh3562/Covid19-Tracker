@@ -57,7 +57,7 @@ export type ResponseData1 = {
 
 // types.ts
 
-export interface CountryInfo {
+export type CountryInfo ={
   _id: number;
   iso2: string;
   iso3: string;
@@ -66,7 +66,7 @@ export interface CountryInfo {
   flag: string;
 }
 
-export interface CountryData {
+export type CountryData ={
   updated: number;
   country: string;
   countryInfo: CountryInfo;
@@ -92,3 +92,37 @@ export interface CountryData {
   criticalPerOneMillion: number;
 }
 
+export type CovidData= {
+  updated: number;
+  cases: number;
+  todayCases: number;
+  deaths: number;
+  todayDeaths: number;
+  recovered: number;
+  todayRecovered: number;
+  active: number;
+  critical: number;
+  casesPerOneMillion: number;
+  deathsPerOneMillion: number;
+  tests: number;
+  testsPerOneMillion: number;
+  population: number;
+  oneCasePerPeople: number;
+  oneDeathPerPeople: number;
+  oneTestPerPeople: number;
+  activePerOneMillion: number;
+  recoveredPerOneMillion: number;
+  criticalPerOneMillion: number;
+  affectedCountries: number;
+}
+
+// Now you can use the CovidData interface in your component to properly type the API response
+
+export type CardGridProps= {
+  data: CovidData;
+}
+
+
+export interface MapComponentProps {
+  countriesData: CountryData[];
+}

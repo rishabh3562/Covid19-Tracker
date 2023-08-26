@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { FaBars, FaHome, FaTasks, FaUser } from 'react-icons/fa';
 import { FunctionBody } from 'typescript';
-import { Link } from 'react-router-dom';
+import { Link ,useOutlet,useParams} from 'react-router-dom';
 import { links } from '../constants/constants';
 interface SidebarItemProps {
   name: string;
@@ -23,7 +23,10 @@ const Navbar:React.FC<NavbarProps> = ({isSidebarOpen,setIsSidebarOpen}) => {
     const toggleNav = () => {
         setIsSidebarOpen(!isSidebarOpen);
     };
-  
+  const outlet = useOutlet();
+  const params = useParams();
+  console.log("params",params);
+  console.log("outlet",outlet);
     return (
      <>
      <nav className="bg-gray-800">
@@ -98,7 +101,7 @@ const Sidebar: React.FC = () => {
         </div>
         <ul className="flex flex-col w-full mt-8">
           <SidebarHeading title="Dashboard" />
-          <SidebarItem name="Contact" icon={<FaHome />} links={links.contact}  />
+          <SidebarItem name="Contact" icon={<FaHome />} links={links.contact.base}  />
           <SidebarItem name="Charts" icon={<FaTasks />} links={links.charts} />
           <SidebarItem name="Profile" icon={<FaUser />} links={links.profile} />
         </ul>

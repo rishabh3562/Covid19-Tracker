@@ -1,12 +1,10 @@
 import React from 'react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-import { CountryData } from '../types'; // Define this type in a separate file
+import { CountryData,MapComponentProps } from '../types'; // Define this type in a separate file
 import L from 'leaflet';
 import redMarker from '../assets/red_marker.png';
-interface MapComponentProps {
-  countriesData: CountryData[];
-}
+
 const customIcon = new L.Icon({
     iconUrl: redMarker,
     iconSize: [12, 12], // Adjust the size based on your icon
