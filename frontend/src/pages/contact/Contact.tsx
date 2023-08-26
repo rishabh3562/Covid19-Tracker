@@ -22,7 +22,7 @@ const ContactsPage: React.FC = () => {
       try {
         setLoading(true);
         const response = await axios.get('/'); // Replace with your API endpoint
-        console.log(response.data.data.length !== 0 ? "true" : "false");
+        // console.log(response.data.data.length !== 0 ? "true" : "false");
         setUsers(response.data.data);
       } catch (error) {
         console.error('Error fetching users:', error);
@@ -63,7 +63,7 @@ const ContactsPage: React.FC = () => {
 
     try {
       const userResponse = await addUserMutation.mutateAsync(newUser);
-      console.log(userResponse);
+      // console.log(userResponse);
       if (userResponse.data._id && image) {
         const imageFormData = new FormData();
         imageFormData.append('image', image);
@@ -77,7 +77,7 @@ const ContactsPage: React.FC = () => {
       setPassword('');
       setImage(null);
     } catch (error) {
-      console.error('Error adding user:', error);
+      // console.error('Error adding user:', error);
     } finally {
       setLoading(false);
     }

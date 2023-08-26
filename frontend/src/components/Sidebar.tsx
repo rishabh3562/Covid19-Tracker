@@ -25,8 +25,8 @@ const Navbar:React.FC<NavbarProps> = ({isSidebarOpen,setIsSidebarOpen}) => {
     };
   const outlet = useOutlet();
   const params = useParams();
-  console.log("params",params);
-  console.log("outlet",outlet);
+  // console.log("params",params);
+  // console.log("outlet",outlet);
     return (
      <>
      <nav className="bg-gray-800">
@@ -86,7 +86,7 @@ const Sidebar: React.FC = () => {
 
     <div className="flex   bg-gray-100">
       <div
-        className={`fixed top-0 left-0 h-full bg-gray-800 w-64 transform ${
+        className={`fixed z-10 top-0 left-0 h-full bg-gray-800 w-64 transform ${
           isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
         } transition-transform ease-in-out duration-300 z-50`}
       >

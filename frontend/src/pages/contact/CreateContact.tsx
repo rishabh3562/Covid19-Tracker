@@ -13,24 +13,19 @@ interface User {
 
 const ContactsPage: React.FC = () => {
   const queryClient = useQueryClient();
-  const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(false);
 
-  useQuery(
-    'users',
-    async () => {
-      try {
-        setLoading(true);
-        const response = await axios.get('/'); // Replace with your API endpoint
-        console.log(response.data.data.length !== 0 ? "true" : "false");
-        setUsers(response.data.data);
-      } catch (error) {
-        console.error('Error fetching users:', error);
-      } finally {
-        setLoading(false);
-      }
+  const { data: users } = useQuery<User[]>('users', async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get('/'); // Replace with your API endpoint
+      return response.data.data;
+    } catch (error) {
+      console.error('Error fetching users:', error);
+    } finally {
+      setLoading(false);
     }
-  );
+  });
 
   const addUserMutation = useMutation(
     (user: User) => axios.post('/api/user/signup', user), // Replace with your signup API endpoint
@@ -63,7 +58,7 @@ const ContactsPage: React.FC = () => {
 
     try {
       const userResponse = await addUserMutation.mutateAsync(newUser);
-      console.log(userResponse);
+
       if (userResponse.data._id && image) {
         const imageFormData = new FormData();
         imageFormData.append('image', image);
@@ -124,20 +119,15 @@ const ContactsPage: React.FC = () => {
 
       <div>
         <h3 className="text-lg font-semibold mb-2">User List</h3>
-        {users.length !== 0 ?
-          (
-            <div className="grid grid-cols-1 sm:grid-col-1 md:grid-cols-3 lg:grid-cols-3 gap-4">
-              {users.map((user: User) => (
-                <UserCard key={user._id} user={user} />
-              ))}
-            </div>
-          )
-          : (
-            <>
-              <p>create users</p>
-            </>
-          )
-        }
+        {users && users.length !== 0 ? (
+          <div className="grid grid-cols-1 sm:grid-col-1 md:grid-cols-3 lg:grid-cols-3 gap-4">
+            {users.map((user: User) => (
+              <UserCard key={user._id} user={user} />
+            ))}
+          </div>
+        ) : (
+          <p>Create users</p>
+        )}
       </div>
     </div>
   );

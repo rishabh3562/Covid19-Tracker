@@ -2,6 +2,7 @@ const express = require("express");
 const {
   authUser,
   allUsers,
+  updateUser
 } = require("../controllers/userControllers");
 const asyncHandler = require('express-async-handler');
 const User = require("../models/userModel");
@@ -56,7 +57,8 @@ router.post('/upload', upload.single('image'), asyncHandler(async (req, res) => 
     res.status(500).json({ message: 'Image upload failed' });
   }
 }));
-
+// router.route('/:id').put(updateUser );
+router.route('/:id').put(updateUser);
 
 router.route("/").get(allUsers);
 // router.route("/signup").post(registerUser);

@@ -126,3 +126,17 @@ export type CardGridProps= {
 export interface MapComponentProps {
   countriesData: CountryData[];
 }
+
+export interface User {
+  _id: string;
+  name: string;
+  email: string;
+  pic: string;
+}
+export interface updateRequest{
+  name: string;
+  email: string;
+}
+export interface UserCardProps {
+  user: User;
+}

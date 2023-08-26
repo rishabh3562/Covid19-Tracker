@@ -12,9 +12,9 @@ const customIcon = new L.Icon({
 const MapComponent: React.FC<MapComponentProps> = ({ countriesData }) => {
   const center: [number, number] = [20, 77]; // india
   const zoom: number = 4; // Initial zoom level
-console.log("countriesData",countriesData);
+// console.log("countriesData",countriesData);
   return (
-    <MapContainer center={center} zoom={zoom} style={{ height: '100%', width: '100%' }}>
+    <MapContainer center={center} zoom={zoom} style={{ height: '100%', width: '100%',zIndex:1 }}>
       <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
       {countriesData.map((country) => (
         <Marker

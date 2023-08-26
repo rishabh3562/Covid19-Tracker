@@ -42,17 +42,17 @@ const allUsers = asyncHandler(async (req, res) => {
 // const registerUser = asyncHandler(
 //   asyncHandler(async (req, res) => {
 //       const { name, email, password } = req.body;
-    
+
 //       // Validate user input (you can add more validation here)
-    
+
 //       // Check if user already exists
 //       const existingUser = await User.findOne({ email });
-    
+
 //       if (existingUser) {
 //         res.status(400).json({ message: 'User already exists' });
 //         return;
 //       }
-    
+
 //       // Create the user
 //       const newUser = await User.create({ name, email, password });
 //       console.log("newUser in signup route :", newUser)
@@ -69,6 +69,33 @@ const allUsers = asyncHandler(async (req, res) => {
 //       });
 //     })
 // );
+const updateUser = asyncHandler(async (req, res) => {
+  const userId = req.params.id;
+  const updatedUser = req.body;
+  console.log("\n\nuserId in updateUser route :", userId)
+  console.log("\n\nupdatedUser in updateUser route :", updatedUser)
+  try {
+    const user = await User.findById(userId);
+    console.log("\n\nuser in updateUser route :", user)
+    if (user) {
+      user.name = updatedUser.name || user.name;
+      user.email = updatedUser.email || user.email;
+      console.log("\n\nuser.name in updateUser route :", user.name)
+      console.log("\n\nuser.email in updateUser route :", user.email)
+      // Be careful with passwords
+      // Update other fields as needed
+
+      const updatedUserInfo = await user.save();
+      console.log("\n\nupdatedUserInfo in updateUser route :", updatedUserInfo)
+      res.status(200).json(updatedUserInfo);
+    } else {
+      res.status(404).json({ error: 'User not found' });
+    }
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
+
 
 // const registerUser = asyncHandler(async (req, res) => {
 //   const { name, email, password, pic } = req.body;
@@ -130,4 +157,4 @@ const authUser = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { allUsers,  authUser };
+module.exports = { allUsers, authUser, updateUser };

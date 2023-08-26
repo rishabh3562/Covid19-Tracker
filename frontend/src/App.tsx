@@ -17,14 +17,14 @@ const App = () => {
   const [data, setData] = React.useState<any>();
   axios.defaults.baseURL = 'http://localhost:8000'
 
-  console.log('Axios Base URL:', axios.defaults.baseURL);
+  // console.log('Axios Base URL:', axios.defaults.baseURL);
   function apicall() {
     axios.get('/').then((res) => {
       setData(res.data);
-      console.log("res", res.data);
+      // console.log("res", res.data);
     }).catch((err) => console.log(err));
   }
-  console.log('Proxy Value:', window.location.origin);
+  // console.log('Proxy Value:', window.location.origin);
 
   // console.log("data", data);
 
@@ -33,7 +33,7 @@ const App = () => {
       <BrowserRouter>
         <Routes >
           <Route path="/" element={<Layout />}>
-            <Route index element={<ChartPage />} />
+            <Route index element={<CreateContact />} />
             <Route path="/contact" element={<CreateContact />}></Route>
             <Route path="/contact/create" element={<CreateContact />} />
             <Route path="/contact/delete" element={<ViewContact />} />
