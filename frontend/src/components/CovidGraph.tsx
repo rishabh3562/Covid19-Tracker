@@ -9,6 +9,7 @@ import {
   Legend,
   ResponsiveContainer
 } from "recharts";
+import { resCovidData } from "../constants/covidDataResponse"; // Correct casing here
 
 interface DataPoint {
   name: string;
@@ -23,7 +24,7 @@ interface CovidData {
   recovered: Record<string, number>;
 }
 
-const covidData: CovidData = {
+const covidData: CovidData = resCovidData ? resCovidData : {
   cases: {
     "1/22/20": 557,
     "1/23/20": 657,
@@ -47,7 +48,10 @@ const chartData: DataPoint[] = Object.keys(covidData.cases).map(date => ({
 
 const App: React.FC = () => {
   return (
-    <ResponsiveContainer width="80%" height={400}>
+
+
+   
+    <ResponsiveContainer  width="100%"  height={400}>
       <LineChart
         data={chartData}
         margin={{
@@ -74,6 +78,7 @@ const App: React.FC = () => {
         <Line yAxisId="right" type="monotone" dataKey="recovered" stroke="#ffc658" />
       </LineChart>
     </ResponsiveContainer>
+ 
   );
 }
 

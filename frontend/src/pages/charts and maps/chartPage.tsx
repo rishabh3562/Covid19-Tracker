@@ -5,7 +5,7 @@ import type { Country,CardGridProps,CountryData } from "../../types";
 import CardComponent from "../../components/CardComponet";
 import { fetchData ,useCountriesData} from "../../utils/apis";
 import MapComponent from "../../components/MapComponent";
-
+import CovidGraph from "../../components/CovidGraph";
 
 const CardGrid: React.FC<CardGridProps> = ({ data }) => {
 
@@ -93,14 +93,21 @@ const App: React.FunctionComponent = () => {
   const { data: countriesData, isError } = useCountriesData();
 
   return (
-    <div>
+    <div className="bg-gray-100">
       {isLoading ? (
         'Loading...'
       ) : data ? (
         <>
-          <CardGrid data={data} />
-          <hr />
-          <div className="p-4 bg-white rounded-lg shadow-md">
+          <Global
+            styles={css`
+              body {
+                background-color: #f1f5f9;
+              }
+            `}
+          />
+        
+         
+          <div className="bg-white p-4 rounded-lg shadow-md w-4/5 mx-auto my-3">
             <h1 className="text-xl font-semibold mb-4">COVID-19 Map</h1>
             {countriesData && (
               <div className="w-ful h-96 shadow-[rgba(100,100,111,0.2)_0px_7px_29px_0px]  rounded-lg overflow-hidden">
@@ -108,6 +115,21 @@ const App: React.FunctionComponent = () => {
               </div>
             )}
           </div>
+          <hr />
+          <div className="bg-white p-4 rounded-lg shadow-md w-4/5 mx-auto my-3">
+            <h1 className="text-xl font-semibold mb-4 mx-auto" >COVID-19 Graph</h1>
+            <CovidGraph/>
+          </div>
+          <hr />
+          <div className="bg-white p-4 rounded-lg shadow-md w-4/5 mx-auto my-3">
+            <h1 className="text-xl font-semibold mb-4">Global Stats</h1>
+            <CardGrid data={data} />
+          </div>
+      
+     
+         
+        
+         
         </>
       ) : null}
     </div>
