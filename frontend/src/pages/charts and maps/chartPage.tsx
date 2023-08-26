@@ -1,10 +1,10 @@
 import { Global, css } from "@emotion/react";
 import { useQuery } from 'react-query';
 import { useEffect, useState } from "react";
-import type { Country,CardGridProps } from "../../types";
+import type { Country,CardGridProps,CountryData } from "../../types";
 import CardComponent from "../../components/CardComponet";
-import { fetchData } from "../../utils/apis";
-
+import { fetchData ,useCountriesData} from "../../utils/apis";
+import MapComponent from "../../components/MapComponent";
 
 
 const CardGrid: React.FC<CardGridProps> = ({ data }) => {
@@ -90,16 +90,24 @@ const CardGrid: React.FC<CardGridProps> = ({ data }) => {
 
 const App: React.FunctionComponent = () => {
   const { data, isLoading } = useQuery('globalData', fetchData);
-  const [activeCountries, setActiveCountries] = useState<Country[]>([]);
+  const { data: countriesData, isError } = useCountriesData();
+
   return (
     <div>
-      
       {isLoading ? (
-        "Loading..."
+        'Loading...'
       ) : data ? (
         <>
           <CardGrid data={data} />
           <hr />
+          <div className="p-4 bg-white rounded-lg shadow-md">
+            <h1 className="text-xl font-semibold mb-4">COVID-19 Map</h1>
+            {countriesData && (
+              <div className="w-ful h-96 shadow-[rgba(100,100,111,0.2)_0px_7px_29px_0px]  rounded-lg overflow-hidden">
+                <MapComponent countriesData={countriesData as CountryData[]} />
+              </div>
+            )}
+          </div>
         </>
       ) : null}
     </div>
@@ -107,3 +115,43 @@ const App: React.FunctionComponent = () => {
 };
 
 export default App;
+
+
+
+/*
+
+import React from 'react';
+import MapComponent from './components/MapComponent';
+import { useCountriesData } from './utils/apis'; // Import the custom hook
+import { CountryData } from './types'; // Import the type
+
+const App: React.FC = () => {
+  const { data: countriesData, isLoading, isError } = useCountriesData();
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (isError) {
+    return <div>Error fetching data</div>;
+  }
+
+  return (
+    <div>
+      <h1>COVID-19 Map</h1>
+      {countriesData && (
+        <MapComponent countriesData={countriesData as CountryData[]} />
+      )}
+    </div>
+  );
+};
+
+export default App;
+
+
+
+
+
+
+
+*/

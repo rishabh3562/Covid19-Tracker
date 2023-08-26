@@ -14,7 +14,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ countriesData }) => {
   const zoom: number = 2; // Initial zoom level
 
   return (
-    <MapContainer center={center} zoom={zoom} style={{ height: '100vh', width: '100%' }}>
+    <MapContainer center={center} zoom={zoom} style={{ height: '100%', width: '100%' }}>
       <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
       {countriesData.map((country) => (
         <Marker

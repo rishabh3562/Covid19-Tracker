@@ -34,16 +34,15 @@ const App = () => {
         <Routes >
           <Route path="/" element={<Layout />}>
             <Route index element={<ChartPage />} />
-        <Route path="/contact" element={<CreateContact />}></Route>
-        <Route path="/contact/create" element={<CreateContact />} />
-          <Route path="/contact/delete" element={<ViewContact />} />
-          <Route path="/contact/users"  element={<ViewContact/>} />
-          <Route path="/contact/edit" element={<EditContact/>} />
-          
+            <Route path="/contact" element={<CreateContact />}></Route>
+            <Route path="/contact/create" element={<CreateContact />} />
+            <Route path="/contact/delete" element={<ViewContact />} />
+            <Route path="/contact/users" element={<ViewContact />} />
+            <Route path="/contact/edit" element={<EditContact />} />
             <Route index path="/chart" element={<ChartPage />} />
             <Route path="/profile" element={<Profile />} />
           </Route>
-<Route path="*" element={<NotFound/>}/>
+          <Route path="*" element={<NotFound />} />
         </Routes>
 
 
