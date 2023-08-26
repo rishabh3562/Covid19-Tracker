@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
 import axios from 'axios';
 import UserCard from '../../components/UserCard';
-
+const baseUrl=process.env.base_url
 interface User {
   _id: string;
   name: string;
@@ -33,7 +33,7 @@ const ContactsPage: React.FC = () => {
   );
 
   const addUserMutation = useMutation(
-    (user: User) => axios.post('/api/user/signup', user), // Replace with your signup API endpoint
+    (user: User) => axios.post(`${baseUrl}/api/user/signup`, user), // Replace with your signup API endpoint
     {
       onError: (error) => {
         console.error('Error adding user:', error);
@@ -68,7 +68,7 @@ const ContactsPage: React.FC = () => {
         const imageFormData = new FormData();
         imageFormData.append('image', image);
 
-        await axios.post(`/api/user/upload?userId=${userResponse.data._id}`, imageFormData); // Replace with your image upload API endpoint
+        await axios.post(`${baseUrl}/api/user/upload?userId=${userResponse.data._id}`, imageFormData); // Replace with your image upload API endpoint
       }
 
       queryClient.invalidateQueries('users');

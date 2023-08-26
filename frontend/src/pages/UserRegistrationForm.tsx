@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
 import axios from 'axios';
-
+const baseUrl=process.env.base_url
 interface UserRegistrationFormProps {
   onSuccess: () => void;
 }
@@ -14,7 +14,7 @@ const UserRegistrationForm: React.FC<UserRegistrationFormProps> = ({ onSuccess }
   const [password, setPassword] = useState('');
 
   const createUserMutation = useMutation((newUser: any) =>
-    axios.post('/api/user', newUser)
+    axios.post(`${baseUrl}/api/user`, newUser)
   );
 
   const handleSubmit = async (e: React.FormEvent) => {
