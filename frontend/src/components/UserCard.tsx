@@ -1,10 +1,7 @@
-
-
 import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
-import axios from 'axios';
-import { getUserDetails, updateUserDetails } from '../utils/apis';
-import { UserCardProps,User } from '../types';
+import { getUserDetails, updateUserDetails } from '../utils/apis'; // Make sure to import your API functions
+import { UserCardProps, User } from '../types';
 
 const UserCard: React.FC<UserCardProps> = ({ user }) => {
   const queryClient = useQueryClient();
@@ -21,30 +18,46 @@ const UserCard: React.FC<UserCardProps> = ({ user }) => {
   const updateUserMutation = useMutation(
     (updatedUser: User) => updateUserDetails(updatedUser),
     {
-      onSuccess: (data: User, variables) => {
-        queryClient.invalidateQueries(['user', variables._id]);
-        setLoading(false);
-        setIsEditing(false);
+      onSuccess: async (updatedData: User, variables) => {
+        try {
+          await queryClient.invalidateQueries(['user', variables._id]);
+          setThisUser(updatedData); // Use updatedData instead of updatedUser
+          setLoading(false);
+          setIsEditing(false);
+        } catch (error) {
+          console.error('Error invalidating query:', error);
+        }
       },
     }
   );
   
- 
-// console.log("userData",userData);
+
   const handleEdit = () => {
     setIsEditing(true);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     setLoading(true);
+  
     const updatedUser = {
       ...thisUser,
       name: editedName,
       email: editedEmail,
     };
-    updateUserMutation.mutate(updatedUser);
+  
+    try {
+      const updatedUserData = await updateUserMutation.mutateAsync(updatedUser);
+      setThisUser(updatedUserData); // Update local state with the data returned from the mutation
+      queryClient.invalidateQueries(['user', user._id]);
+      setLoading(false);
+      setIsEditing(false);
+    } catch (error) {
+      console.error('Error updating user:', error);
+      setLoading(false);
+    }
   };
-// console.log("thisUser",thisUser);
+  
+
   const defaultImg =
     'https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg';
 
@@ -60,14 +73,14 @@ const UserCard: React.FC<UserCardProps> = ({ user }) => {
 
   return (
     <div className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 p-4">
-     
+      {/* Your JSX for displaying user card */}
       <div className="flex flex-col items-center pt-4">
         <img
           className="w-24 h-24 mb-3 rounded-full shadow-lg"
           src={imageUrl}
           alt={thisUser.name}
         />
-        {isEditing ? (
+          {isEditing ? (
           <>
             <input
               className="mb-2 px-3 py-2 border rounded-lg w-full"
@@ -108,6 +121,7 @@ const UserCard: React.FC<UserCardProps> = ({ user }) => {
           delete
         </button>
       </div>
+        {/* Rest of your JSX */}
       </div>
     </div>
   );
